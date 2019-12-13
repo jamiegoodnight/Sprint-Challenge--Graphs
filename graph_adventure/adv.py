@@ -31,7 +31,7 @@ reverse=[]
 #-----------
 #Chicken scratch stuff
 #-----------
-while len(copy) < 9:
+while len(copy) < 500:
   curRoom=player.currentRoom.id
   if curRoom not in copy:
     copy[curRoom]=curRoom 
@@ -45,7 +45,7 @@ while len(copy) < 9:
   
   curExits=copy[curRoom]
 
-  if 'n' in copy[curRoom]:
+  if 'n' in copy[curRoom] and curExits['n'] == 'unknown':
     print(copy[curRoom], "Currently")
     if curExits['n']=='unknown':
       player.travel("n")
@@ -64,7 +64,7 @@ while len(copy) < 9:
     # print("*****HERE IS THE COPY*****", copy)
     # print("*****HERE IS COPY LENGTH*****", len(copy))
 
-  elif 's' in copy[curRoom]:
+  elif 's' in copy[curRoom] and curExits['s'] == 'unknown':
     print(copy[curRoom], "Currently")
     if curExits['s']=='unknown':
       player.travel("s")
@@ -82,7 +82,7 @@ while len(copy) < 9:
     # print("*****HERE IS THE TRAVERSAL PATHS*****", traversalPath)
     # print("*****HERE IS THE COPY*****", copy)
 
-  elif 'e' in copy[curRoom]:
+  elif 'e' in copy[curRoom] and curExits['e'] == 'unknown':
     print(copy[curRoom], "Currently")
     if curExits['e']=='unknown':
       player.travel("e")
@@ -100,7 +100,7 @@ while len(copy) < 9:
     # print("*****HERE IS THE TRAVERSAL PATHS*****", traversalPath)
     # print("*****HERE IS THE COPY*****", copy)
 
-  elif 'w' in copy[curRoom]:
+  elif 'w' in copy[curRoom] and curExits['w'] == 'unknown':
     print(copy[curRoom], "Currently")
     if curExits['w']=='unknown':
       player.travel("w")
@@ -117,20 +117,6 @@ while len(copy) < 9:
     reversal=reverse.pop()
     player.travel(reversal)
     traversalPath.append(reversal)
-
-# TRAVERSAL TEST
-visited_rooms = set()
-player.currentRoom = world.startingRoom
-visited_rooms.add(player.currentRoom)
-for move in traversalPath:
-    player.travel(move)
-    visited_rooms.add(player.currentRoom)
-
-if len(visited_rooms) == len(roomGraph):
-    print(f"TESTS PASSED: {len(traversalPath)} moves, {len(visited_rooms)} rooms visited")
-else:
-    print("TESTS FAILED: INCOMPLETE TRAVERSAL")
-    print(f"{len(roomGraph) - len(visited_rooms)} unvisited rooms")
 
 
 

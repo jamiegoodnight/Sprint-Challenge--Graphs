@@ -31,6 +31,7 @@ reverse=[]
 #-----------
 #Chicken scratch stuff
 #-----------
+seconds=time.time()
 while len(copy) < 500:
   curRoom=player.currentRoom.id
   if curRoom not in copy:
@@ -52,6 +53,12 @@ while len(copy) < 500:
       traversalPath.append("n")
       newRoom=player.currentRoom.id
       curExits['n']=newRoom
+      newExits={}
+      if newRoom not in copy:
+        for exit in player.currentRoom.getExits():
+          newExits[exit]="unknown"
+          copy[newRoom]=newExits
+        newExits['s']=curRoom
 
       reverse.append('s')
       print("*****HERE IS THE TRAVERSAL PATHS*****", traversalPath)
@@ -117,6 +124,8 @@ while len(copy) < 500:
     reversal=reverse.pop()
     player.travel(reversal)
     traversalPath.append(reversal)
+
+
 
 
 

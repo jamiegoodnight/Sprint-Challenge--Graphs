@@ -1,6 +1,7 @@
 from room import Room
 from player import Player
 from world import World
+import time
 
 import random
 
@@ -21,32 +22,121 @@ player = Player("Name", world.startingRoom)
 
 
 # FILL THIS IN
-traversalPath = ['n', 's']
+traversalPath = []
+
+print(len(roomGraph), "Length")
+print("EXITS", player.currentRoom.getExits())
+#-----------
+copy={} #Copy of the roomGraph
+reverse=[]
+#-----------
+#Chicken scratch stuff
+#-----------
+seconds=time.time()
+while len(copy) < 500:
+  curRoom=player.currentRoom.id
+  if curRoom not in copy:
+    copy[curRoom]=curRoom 
+    curExits={}
+  
+    for exit in player.currentRoom.getExits():
+      curExits[exit]="unknown"
+
+    copy[curRoom]=curExits
+    print("LET'S SEE THIS", copy[curRoom])
+  
+  curExits=copy[curRoom]
+
+  if 'n' in copy[curRoom] and curExits['n'] == 'unknown':
+    print(copy[curRoom], "Currently")
+    if curExits['n']=='unknown':
+      player.travel("n")
+      traversalPath.append("n")
+      newRoom=player.currentRoom.id
+      curExits['n']=newRoom
+      newExits={}
+      if newRoom not in copy:
+        for exit in player.currentRoom.getExits():
+          newExits[exit]="unknown"
+          copy[newRoom]=newExits
+        newExits['s']=curRoom
+
+      reverse.append('s')
+      print("*****HERE IS THE TRAVERSAL PATHS*****", traversalPath)
+      print("*****HERE IS THE COPY*****", copy)
+      print("*****HERE IS COPY LENGTH*****", len(copy))
+    # copy[curRoom][0]="v"
+    # player.travel("n")
+    # traversalPath.append("n")
+    # print("*****HERE IS THE TRAVERSAL PATHS*****", traversalPath)
+    # print("*****HERE IS THE COPY*****", copy)
+    # print("*****HERE IS COPY LENGTH*****", len(copy))
+
+  elif 's' in copy[curRoom] and curExits['s'] == 'unknown':
+    print(copy[curRoom], "Currently")
+    if curExits['s']=='unknown':
+      player.travel("s")
+      traversalPath.append("s")
+      newRoom=player.currentRoom.id
+      curExits['s']=newRoom
+
+      reverse.append('n')
+      print("*****HERE IS THE TRAVERSAL PATHS*****", traversalPath)
+      print("*****HERE IS THE COPY*****", copy)
+      print("*****HERE IS COPY LENGTH*****", len(copy))
+    # copy[curRoom][1]="v"
+    # player.travel("s")
+    # traversalPath.append("s")
+    # print("*****HERE IS THE TRAVERSAL PATHS*****", traversalPath)
+    # print("*****HERE IS THE COPY*****", copy)
+
+  elif 'e' in copy[curRoom] and curExits['e'] == 'unknown':
+    print(copy[curRoom], "Currently")
+    if curExits['e']=='unknown':
+      player.travel("e")
+      traversalPath.append("e")
+      newRoom=player.currentRoom.id
+      curExits['e']=newRoom
+
+      reverse.append('w')
+      print("*****HERE IS THE TRAVERSAL PATHS*****", traversalPath)
+      print("*****HERE IS THE COPY*****", copy)
+      print("*****HERE IS COPY LENGTH*****", len(copy))
+    # copy[curRoom][3]="v"
+    # player.travel("e")
+    # traversalPath.append("e")
+    # print("*****HERE IS THE TRAVERSAL PATHS*****", traversalPath)
+    # print("*****HERE IS THE COPY*****", copy)
+
+  elif 'w' in copy[curRoom] and curExits['w'] == 'unknown':
+    print(copy[curRoom], "Currently")
+    if curExits['w']=='unknown':
+      player.travel("w")
+      traversalPath.append("w")
+      newRoom=player.currentRoom.id
+      curExits['w']=newRoom
+
+      reverse.append('e')
+      print("*****HERE IS THE TRAVERSAL PATHS*****", traversalPath)
+      print("*****HERE IS THE COPY*****", copy)
+      print("*****HERE IS COPY LENGTH*****", len(copy))
+
+  else: 
+    reversal=reverse.pop()
+    player.travel(reversal)
+    traversalPath.append(reversal)
 
 
-# TRAVERSAL TEST
-visited_rooms = set()
-player.currentRoom = world.startingRoom
-visited_rooms.add(player.currentRoom)
-for move in traversalPath:
-    player.travel(move)
-    visited_rooms.add(player.currentRoom)
-
-if len(visited_rooms) == len(roomGraph):
-    print(f"TESTS PASSED: {len(traversalPath)} moves, {len(visited_rooms)} rooms visited")
-else:
-    print("TESTS FAILED: INCOMPLETE TRAVERSAL")
-    print(f"{len(roomGraph) - len(visited_rooms)} unvisited rooms")
 
 
 
 #######
 # UNCOMMENT TO WALK AROUND
 #######
-# player.currentRoom.printRoomDescription(player)
-# while True:
-#     cmds = input("-> ").lower().split(" ")
-#     if cmds[0] in ["n", "s", "e", "w"]:
-#         player.travel(cmds[0], True)
-#     else:
-#         print("I did not understand that command.")
+player.currentRoom.printRoomDescription(player)
+while True:
+    cmds = input("-> ").lower().split(" ")
+    if cmds[0] in ["n", "s", "e", "w"]:
+        player.travel(cmds[0], True)
+    else:
+        print("I did not understand that command.")

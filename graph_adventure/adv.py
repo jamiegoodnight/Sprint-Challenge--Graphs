@@ -27,7 +27,7 @@ print(len(roomGraph), "Length")
 print("EXITS", player.currentRoom.getExits())
 #-----------
 copy={} #Copy of the roomGraph
-stack=[]
+reverse=[]
 #-----------
 #Chicken scratch stuff
 #-----------
@@ -37,17 +37,23 @@ while len(copy) < 9:
     copy[curRoom]=curRoom 
     curExits={}
   
-  for exit in player.currentRoom.getExits():
-    curExits[exit]="unknown"
-  copy[curRoom]=curExits
-  print("LET'S SEE THIS", copy[curRoom])
+    for exit in player.currentRoom.getExits():
+      curExits[exit]="unknown"
+
+    copy[curRoom]=curExits
+    print("LET'S SEE THIS", copy[curRoom])
+  
+  curExits=copy[curRoom]
 
   if 'n' in copy[curRoom]:
     print(copy[curRoom], "Currently")
-    if "n_visited" not in copy[curRoom]:
-      copy[curRoom]=copy[curRoom] + ["n_visisted"]
+    if curExits['n']=='unknown':
       player.travel("n")
       traversalPath.append("n")
+      newRoom=player.currentRoom.id
+      curExits['n']=newRoom
+
+      reverse.append('s')
       print("*****HERE IS THE TRAVERSAL PATHS*****", traversalPath)
       print("*****HERE IS THE COPY*****", copy)
       print("*****HERE IS COPY LENGTH*****", len(copy))
@@ -60,10 +66,13 @@ while len(copy) < 9:
 
   elif 's' in copy[curRoom]:
     print(copy[curRoom], "Currently")
-    if "s_visited" not in copy[curRoom]:
-      copy[curRoom]=copy[curRoom] + ["s_visisted"]
+    if curExits['s']=='unknown':
       player.travel("s")
       traversalPath.append("s")
+      newRoom=player.currentRoom.id
+      curExits['s']=newRoom
+
+      reverse.append('n')
       print("*****HERE IS THE TRAVERSAL PATHS*****", traversalPath)
       print("*****HERE IS THE COPY*****", copy)
       print("*****HERE IS COPY LENGTH*****", len(copy))
@@ -75,10 +84,13 @@ while len(copy) < 9:
 
   elif 'e' in copy[curRoom]:
     print(copy[curRoom], "Currently")
-    if "n_visited" not in copy[curRoom]:
-      copy[curRoom]=copy[curRoom] + ["e_visisted"]
+    if curExits['e']=='unknown':
       player.travel("e")
       traversalPath.append("e")
+      newRoom=player.currentRoom.id
+      curExits['e']=newRoom
+
+      reverse.append('w')
       print("*****HERE IS THE TRAVERSAL PATHS*****", traversalPath)
       print("*****HERE IS THE COPY*****", copy)
       print("*****HERE IS COPY LENGTH*****", len(copy))
@@ -90,18 +102,21 @@ while len(copy) < 9:
 
   elif 'w' in copy[curRoom]:
     print(copy[curRoom], "Currently")
-    if "w_visited" not in copy[curRoom]:
-      copy[curRoom]=copy[curRoom] + ["w_visisted"]
+    if curExits['w']=='unknown':
       player.travel("w")
       traversalPath.append("w")
+      newRoom=player.currentRoom.id
+      curExits['w']=newRoom
+
+      reverse.append('e')
       print("*****HERE IS THE TRAVERSAL PATHS*****", traversalPath)
       print("*****HERE IS THE COPY*****", copy)
       print("*****HERE IS COPY LENGTH*****", len(copy))
 
   else: 
-    print("error")
-    break
-
+    reversal=reverse.pop()
+    player.travel(reversal)
+    traversalPath.append(reversal)
 
 # TRAVERSAL TEST
 visited_rooms = set()
